@@ -3,6 +3,7 @@
 echo "Introduce la contraseña para el usuario de MySQL:"
 read -s mysql_password
 echo "Introduce la contraseña para el usuario de Nextcloud (ej. talde1):"
+read -s nextcloud_user_name
 read -s nextcloud_user_password
 
 echo "Actualizando el sistema..."
@@ -64,9 +65,9 @@ sudo systemctl enable mysql
 
 echo "Creando base de datos y usuario para Nextcloud en MySQL..."
 sudo mysql -u root -p"${mysql_password}" -e "
-CREATE USER 'nextclouduser'@'localhost' IDENTIFIED BY '${nextcloud_user_password}';
+CREATE USER '${nextcloud_user_name}'@'localhost' IDENTIFIED BY '${nextcloud_user_password}';
 CREATE DATABASE IF NOT EXISTS nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextclouduser'@'localhost';
+GRANT ALL PRIVILEGES ON nextcloud.* TO ${nextcloud_user_name}'@'localhost';
 FLUSH PRIVILEGES;"
 
 echo "Iniciando servicios Apache y MySQL..."
