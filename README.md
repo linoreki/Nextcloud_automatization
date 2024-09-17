@@ -1,5 +1,5 @@
 
-```markdown
+
 # Nextcloud_automatization
 
 This repository contains a Bash script that automates the installation and configuration of [Nextcloud](https://nextcloud.com/), an open-source file sync and share solution. The script will install the required dependencies, configure Apache and MySQL, and set up Nextcloud on your server with minimal manual intervention.
