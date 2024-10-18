@@ -2,8 +2,9 @@
 
 echo "Introduce la contraseña para el usuario de MySQL:"
 read -s mysql_password
-echo "Introduce la contraseña para el usuario de Nextcloud (ej. talde1):"
+echo "Introduce el usuario de Nextcloud (ej. talde1):"
 read -s nextcloud_user_name
+echo "Introduce la contraseña para el usuario de Nextcloud (ej. talde1):"
 read -s nextcloud_user_password
 
 echo "Actualizando el sistema..."
@@ -76,3 +77,10 @@ sudo systemctl start apache2
 sudo systemctl start mysql
 
 echo "Instalación de Nextcloud completada. Accede a tu servidor para continuar con la configuración."
+
+echo "Puedes acceder a tu servidor en http://localhost/nextcloud o http://IP"
+echo "Recuerda que puedes configurar el dominio y el certificado SSL para que Next"
+echo .
+echo "el usuario de la base de datos es root y el  password es ${mysql_password}"
+echo "el usuario de el nextcloud es ${nextcloud_user_name}"
+echo "la contraseña de el nextcloud es  ${nextcloud_user_password}"
