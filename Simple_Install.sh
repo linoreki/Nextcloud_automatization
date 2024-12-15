@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# echo "Introduce la contraseña para el usuario de MySQL:"
-# read -s mysql_password
-# echo "Introduce el usuario de Nextcloud (ej. talde1):"
-# read -s nextcloud_user_name
-# echo "Introduce la contraseña para el usuario de Nextcloud (ej. talde1):"
-# read -s nextcloud_user_password
+# Solicitar datos de entrada al usuario.
+echo "Introduce la contrase\u00f1a para el usuario de MySQL:"
+read -s mysql_password
+echo "Introduce el usuario de Nextcloud (ej. talde1):"
+read nextcloud_user_name
+echo "Introduce la contrase\u00f1a para el usuario de Nextcloud (ej. talde1):"
+read -s nextcloud_user_password
 
 echo "Actualizando el sistema..."
 sudo apt update && sudo apt upgrade -y
@@ -64,22 +65,26 @@ echo "Configurando MySQL..."
 sudo systemctl start mysql
 sudo systemctl enable mysql
 
-# echo "Creando base de datos y usuario para Nextcloud en MySQL..."
-# sudo mysql -u root -p"${mysql_password}" -e "CREATE USER '${nextcloud_user_name}'@'localhost' IDENTIFIED BY '${nextcloud_user_password}';
-# CREATE DATABASE IF NOT EXISTS nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-# GRANT ALL PRIVILEGES ON nextcloud.* TO ${nextcloud_user_name}'@'localhost';
-# FLUSH PRIVILEGES;"
+echo "Creando base de datos y usuario para Nextcloud en MySQL..."
+sudo mysql -u root -p"${mysql_password}" <<EOF
+CREATE USER '${nextcloud_user_name}'@'localhost' IDENTIFIED BY '${nextcloud_user_password}';
+CREATE DATABASE IF NOT EXISTS nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+GRANT ALL PRIVILEGES ON nextcloud.* TO '${nextcloud_user_name}'@'localhost';
+FLUSH PRIVILEGES;
+EOF
 
 echo "Iniciando servicios Apache y MySQL..."
 sudo systemctl enable apache2
 sudo systemctl start apache2
 sudo systemctl start mysql
 
-echo "Instalación de Nextcloud completada. Accede a tu servidor para continuar con la configuración."
+echo "Instalaci\u00f3n de Nextcloud completada. Accede a tu servidor para continuar con la configuraci\u00f3n."
 
 echo "Puedes acceder a tu servidor en http://localhost/nextcloud o http://IP"
-echo "Recuerda que puedes configurar el dominio y el certificado SSL para que Next"
-echo .
-echo "el usuario de la base de datos es root y el  password es ${mysql_password}"
-echo "el usuario de el nextcloud es ${nextcloud_user_name}"
-echo "la contraseña de el nextcloud es  ${nextcloud_user_password}"
+echo "Recuerda que puedes configurar el dominio y el certificado SSL para que Nextcloud sea accesible de manera segura."
+
+echo "\n--- Resumen de credenciales ---"
+echo "Usuario de la base de datos MySQL: root"
+echo "Contrase\u00f1a de MySQL: ${mysql_password}"
+echo "Usuario de Nextcloud: ${nextcloud_user_name}"
+echo "Contrase\u00f1a de Nextcloud: ${nextcloud_user_password}"

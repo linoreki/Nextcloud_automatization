@@ -19,10 +19,10 @@ while [[ -z "$server_admin" ]]; do
     read -p "Introduce el email del administrador del servidor: " server_admin
 done
 
-echo "Introduce la contraseña para el usuario root de MySQL:"
-read -s mysql_password
-echo "Introduce la contraseña para el usuario de Nextcloud (ej. nextclouduser):"
-read -s nextcloud_user_password
+read -s -p "Introduce la contraseña para el usuario root de MySQL: " mysql_password
+echo
+read -s -p "Introduce la contraseña para el usuario de Nextcloud (ej. nextclouduser): " nextcloud_user_password
+echo
 
 echo "Actualizando el sistema..."
 sudo apt update && sudo apt upgrade -y
@@ -72,10 +72,10 @@ sudo bash -c "cat > /etc/apache2/sites-available/nextcloud.conf" <<EOF
     </Directory>
 
     <IfModule mod_headers.c>
-        Header always set X-Content-Type-Options "nosniff"
-        Header always set X-XSS-Protection "1; mode=block"
-        Header always set X-Frame-Options "DENY"
-        Header always set Referrer-Policy "no-referrer"
+        Header always set X-Content-Type-Options \"nosniff\"
+        Header always set X-XSS-Protection \"1; mode=block\"
+        Header always set X-Frame-Options \"DENY\"
+        Header always set Referrer-Policy \"no-referrer\"
     </IfModule>
 
     ErrorLog \${APACHE_LOG_DIR}/nextcloud_error.log
@@ -91,11 +91,12 @@ sudo ufw allow 80
 sudo ufw allow 443
 
 echo "Configurando MySQL..."
-sudo mysql -u root -p"$mysql_password" -e "
+sudo mysql -u root -p"$mysql_password" <<EOF
 CREATE USER 'nextclouduser'@'localhost' IDENTIFIED BY '$nextcloud_user_password';
 CREATE DATABASE nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextclouduser'@'localhost';
-FLUSH PRIVILEGES;"
+FLUSH PRIVILEGES;
+EOF
 
 read -p "¿Quieres habilitar SSL con Let's Encrypt? (s/n): " enable_ssl
 if [ "$enable_ssl" == "s" ]; then
